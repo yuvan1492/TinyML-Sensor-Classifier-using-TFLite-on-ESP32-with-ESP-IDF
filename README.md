@@ -206,6 +206,52 @@ ANOMALY normal=0.051 anomaly=0.949 latency_us=1254
 The device correctly distinguished both known windows. The measured inference
 latency was 1.957 ms for the normal sample and 1.254 ms for the anomaly sample.
 
+### UART Verification Screenshot
+
+The following capture shows the real serial test on `COM24`, including both
+normal and anomaly predictions:
+
+![ESP32 UART verification output](docs/tinyml_result.png)
+
+### Reproduce the Verification
+
+1. Activate ESP-IDF and build/flash the firmware:
+
+  ```powershell
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
+  & "C:\Users\41216\Videos\esp-idf\export.ps1"
+  Set-Location "C:\Users\41216\Videos\AI_\04-tinyml-esp32\esp-idf"
+  idf.py -p COM24 build flash
+  ```
+
+2. Open the serial monitor and wait for `ready`:
+
+  ```powershell
+  idf.py -p COM24 monitor
+  ```
+
+3. From a second terminal, send the two known windows with the included test
+  client. It uses the ESP-IDF Python environment, which includes `pyserial`:
+
+  ```powershell
+  & "C:\Users\41216\.espressif\python_env\idf6.2_py3.14_env\Scripts\python.exe" `
+    "C:\Users\41216\Videos\AI_\04-tinyml-esp32\test_serial.py"
+  ```
+
+4. Confirm output equivalent to:
+
+  ```text
+  --- connected to COM24 ---
+  >>> sending NORMAL sample
+  NORMAL normal=0.953 anomaly=0.047 latency_us=1957
+  >>> sending ANOMALY sample
+  ANOMALY normal=0.051 anomaly=0.949 latency_us=1254
+  ```
+
+The exact latency can vary slightly between runs. The verification passes when
+the normal window is classified as `NORMAL`, the spiked window as `ANOMALY`,
+and both responses include a measured `latency_us` value.
+
 ## Troubleshooting Notes
 
 ### `driver/uart.h: No such file or directory`
