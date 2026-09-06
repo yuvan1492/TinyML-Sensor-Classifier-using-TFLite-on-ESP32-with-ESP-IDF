@@ -1,0 +1,38 @@
+# Python environments and caches
+.venv/
+.venv-*/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Local logs and temporary setup checks
+*.log
+_idf_check.*
+
+# ESP-IDF generated build/configuration state
+esp-idf/build/
+esp-idf/managed_components/
+esp-idf/sdkconfig
+esp-idf/sdkconfig.old
+
+# Generated ESP-IDF and tool metadata
+.espressif/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Flashing and debugger leftovers
+*_flashed.bin
+*.map
+*.elf
+*.bin
+
+# Keep the intentionally published model artifacts and embedded model header.
+!artifacts/
+!artifacts/*.tflite
+!artifacts/*.keras
+!artifacts/metadata.json
+!esp-idf/main/model_data.h

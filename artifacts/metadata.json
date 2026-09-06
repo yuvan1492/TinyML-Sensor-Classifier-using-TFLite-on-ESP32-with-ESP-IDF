@@ -1,0 +1,23 @@
+{
+  "window_length": 32,
+  "class_names": [
+    "normal",
+    "anomaly"
+  ],
+  "test_accuracy": 1.0,
+  "input_shape": [
+    1,
+    32,
+    1
+  ],
+  "input_dtype": "<class 'numpy.int8'>",
+  "input_scale": 0.012561725452542305,
+  "input_zero_point": -33,
+  "output_shape": [
+    1,
+    2
+  ],
+  "output_dtype": "<class 'numpy.int8'>",
+  "output_scale": 0.00390625,
+  "output_zero_point": -128
+}
