@@ -1,0 +1,41 @@
+name: ESP32 firmware CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-emulate:
+    runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:release-v6.1
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ESP32 QEMU
+        run: |
+          apt-get update
+          apt-get install -y libgcrypt20 libglib2.0-0 libpixman-1-0 libsdl2-2.0-0 libslirp0
+          python "$IDF_PATH/tools/idf_tools.py" install qemu-xtensa
+
+      - name: Build ESP32 firmware
+        working-directory: esp-idf
+        run: |
+          idf.py set-target esp32
+          idf.py build
+
+      - name: Create QEMU flash image
+        working-directory: esp-idf
+        run: idf.py merge-bin -o flash_image.bin --pad-to-size 2MB
+
+      - name: Boot firmware and verify UART inference
+        run: |
+          source "$IDF_PATH/export.sh"
+          python3 test_qemu.py --qemu "$(command -v qemu-system-xtensa)" --flash-image esp-idf/build/flash_image.bin

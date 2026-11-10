@@ -183,6 +183,14 @@ Send exactly 32 comma-separated floating-point values followed by a newline.
 The firmware quantizes the line, invokes TFLite Micro, compares the two
 dequantized outputs, and prints the predicted class and execution time.
 
+## Continuous Integration
+
+GitHub Actions builds the ESP32 firmware, merges its flash image, and boots it
+in Espressif QEMU. The smoke test sends normal and anomaly windows over the
+emulated UART and checks both labels and inference latency. QEMU validates the
+boot and inference path, but does not replace timing measurements on physical
+hardware.
+
 ## Verified Results
 
 Training and conversion produced:
