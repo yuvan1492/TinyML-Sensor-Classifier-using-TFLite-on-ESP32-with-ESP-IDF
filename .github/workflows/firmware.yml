@@ -28,12 +28,15 @@ jobs:
       - name: Build ESP32 firmware
         working-directory: esp-idf
         run: |
+          source "$IDF_PATH/export.sh"
           idf.py set-target esp32
           idf.py build
 
       - name: Create QEMU flash image
         working-directory: esp-idf
-        run: idf.py merge-bin -o flash_image.bin --pad-to-size 2MB
+        run: |
+          source "$IDF_PATH/export.sh"
+          idf.py merge-bin -o flash_image.bin --pad-to-size 2MB
 
       - name: Boot firmware and verify UART inference
         run: |
